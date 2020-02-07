@@ -3,4 +3,4 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: cloudformation-build-jaworra
+      BucketName: cloudformation-build-incidentsdash-jaworra
