@@ -82,5 +82,48 @@ Resources:
             col_wkday = 'weekday'    
             col_inc = 'incidentcount' 
             col_hm = 'hhmm_utcplus10' 
-            
+
+            #anthena query
+            '''
+            SELECT weekday, hhmm_utcplus10, 1 as select_order,
+            min (incidentcount) as "minimum_incidents",
+            approx_percentile(incidentcount, 0.25) as "appx_Q1_incidents",
+            AVG (incidentcount) as "average_incidents",
+            approx_percentile(incidentcount, 0.75) as "appx_Q3_incidents",                      
+            max (incidentcount) as "maximum_incidents"
+            FROM "incidents"."daily_summaries_dashboard" where weekday = 'Monday' 
+            GROUP BY weekday,hhmm_utcplus10
+            UNION 
+            SELECT weekday, hhmm_utcplus10, 2 as select_order,
+            min (incidentcount) as "minimum_incidents",
+            approx_percentile(incidentcount, 0.25) as "appx_Q1_incidents",
+            AVG (incidentcount) as "average_incidents",
+            approx_percentile(incidentcount, 0.75) as "appx_Q3_incidents",                      
+            max (incidentcount) as "maximum_incidents"
+            FROM "incidents"."daily_summaries_dashboard" where weekday = 'Tuesday' 
+            GROUP BY weekday,hhmm_utcplus10 Order by select_order,hhmm_utcplus10
+            '''
+ 
+            query = "SELECT %s,%s,%d as select_order, " \
+              "min (%s) as minimum_incidents," \
+              "approx_percentile(%s, 0.25) as appx_Q1_incidents," \
+              "AVG (%s) as average_incidents," \
+              "approx_percentile(%s, 0.75) as appx_Q3_incidents," \
+              "max (%s) as maximum_incidents " \
+              "FROM %s.%s where %s = '%s' " \
+              "GROUP BY %s,%s" \
+              " UNION " \
+              "SELECT %s,%s,%d as select_order, " \
+              "min (%s) as minimum_incidents," \
+              "approx_percentile(%s, 0.25) as appx_Q1_incidents," \
+              "AVG (%s) as average_incidents," \
+              "approx_percentile(%s, 0.75) as appx_Q3_incidents," \
+              "max (%s) as maximum_incidents " \
+              "FROM %s.%s where %s = '%s' " \
+              "GROUP BY %s,%s ORDER BY select_order,%s;"  \
+              % (col_wkday, col_hm,sel_stat_1,col_inc,col_inc,col_inc,col_inc,col_inc,
+              DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,
+              col_wkday, col_hm,sel_stat_2,col_inc,col_inc,col_inc,col_inc,col_inc,
+              DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,col_hm) 
+                          
             return
