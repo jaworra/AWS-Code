@@ -33,3 +33,32 @@ Resources:
           S3_OUTPUT = 's3://public-test-road/stat/qry'
           S3_BUCKET = 'qry'
           RETRY_COUNT = 5 # number of retries
+
+          #------------------ queries run on below athena table-----------------------
+          #create table if required below athena db *refrence incase tabld is dropped
+          '''
+          CREATE EXTERNAL TABLE IF NOT EXISTS historic_incidents_db.daily_summaries_partition(
+          `date` string,
+          `weekday` string,
+          'incidentcount` int,
+          `crashcount` int 
+          ) PARTITIONED BY (
+          `yymmdd_utcplus10` string 
+          )
+          ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+          WITH SERDEPROPERTIES (
+            'serialization.format' = ',',
+            'field.delim' = ','
+          ) LOCATION 's3://public-test-road/stat/bytime/'
+          TBLPROPERTIES ('has_encrypted_data'='false')
+          '''
+
+          import boto3
+          import json
+          import datetime
+          from datetime import date, timedelta
+          from botocore.vendored import requests
+          import urllib2
+          import json
+
+          from athena_lambda import *
