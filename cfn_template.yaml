@@ -62,6 +62,7 @@ Resources:
           import json
 
           from athena_lambda import *
+
           def athena_next_24_hrs_past_24_hrs():
             '''
             create a rolling 48hour window for dashboard statistics every 24hours (set at 1145)
@@ -82,60 +83,4 @@ Resources:
             col_inc = 'incidentcount' 
             col_hm = 'hhmm_utcplus10' 
             
-            #anthena query
-            '''
-            SELECT weekday, hhmm_utcplus10, 1 as select_order,
-            min (incidentcount) as "minimum_incidents",
-            approx_percentile(incidentcount, 0.25) as "appx_Q1_incidents",
-            AVG (incidentcount) as "average_incidents",
-            approx_percentile(incidentcount, 0.75) as "appx_Q3_incidents",                      
-            max (incidentcount) as "maximum_incidents"
-            FROM "incidents"."daily_summaries_dashboard" where weekday = 'Monday' 
-            GROUP BY weekday,hhmm_utcplus10
-            UNION 
-            SELECT weekday, hhmm_utcplus10, 2 as select_order,
-            min (incidentcount) as "minimum_incidents",
-            approx_percentile(incidentcount, 0.25) as "appx_Q1_incidents",
-            AVG (incidentcount) as "average_incidents",
-            approx_percentile(incidentcount, 0.75) as "appx_Q3_incidents",                      
-            max (incidentcount) as "maximum_incidents"
-            FROM "incidents"."daily_summaries_dashboard" where weekday = 'Tuesday' 
-            GROUP BY weekday,hhmm_utcplus10 Order by select_order,hhmm_utcplus10
-            '''
-            
-            query = "SELECT %s,%s,%d as select_order, " \
-              "min (%s) as minimum_incidents," \
-              "approx_percentile(%s, 0.25) as appx_Q1_incidents," \
-              "AVG (%s) as average_incidents," \
-              "approx_percentile(%s, 0.75) as appx_Q3_incidents," \
-              "max (%s) as maximum_incidents " \
-              "FROM %s.%s where %s = '%s' " \
-              "GROUP BY %s,%s" \
-              " UNION " \
-              "SELECT %s,%s,%d as select_order, " \
-              "min (%s) as minimum_incidents," \
-              "approx_percentile(%s, 0.25) as appx_Q1_incidents," \
-              "AVG (%s) as average_incidents," \
-              "approx_percentile(%s, 0.75) as appx_Q3_incidents," \
-              "max (%s) as maximum_incidents " \
-              "FROM %s.%s where %s = '%s' " \
-              "GROUP BY %s,%s ORDER BY select_order,%s;"  \
-              % (col_wkday, col_hm,sel_stat_1,col_inc,col_inc,col_inc,col_inc,col_inc,
-              DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,
-              col_wkday, col_hm,sel_stat_2,col_inc,col_inc,col_inc,col_inc,col_inc,
-              DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,col_hm) 
-            
-            #calls athena query
-            results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
-        
-            #using id move csv file to S3 curated bucket for typical weekday and weekend
-            client_s3 = boto3.resource('s3')
-            # Copy anthena query to curated csv for frontend rendering - html,D3
-            client_s3.Object(bucketname_routes,  "stat/rolling_48_hour_window.csv").copy_from(CopySource= filepath_incidents_statistic_write + "qry/"+ query_execution_id + ".csv")
-            
-            # Delete the former object A
-            client_s3.Object(bucketname_routes, "stat/qry/"+ query_execution_id + ".csv").delete()
-            client_s3.Object(bucketname_routes, "stat/qry/"+ query_execution_id + ".csv.metadata").delete()
-            #set lifecycle policy in bucket subfolder - month exipiry (28-32 files)
-            print 'SUCCESSFUL - athena_next_24_hrs_past_24_hrs'  
             return
