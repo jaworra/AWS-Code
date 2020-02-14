@@ -132,9 +132,9 @@ Resources:
             
             return
 
-Primerinvoke:
-  Type: AWS::CloudFormation::CustomResource
-  DependsOn: LambdaFunction1
-  Version: "1.0"
-  Properties:
-    ServiceToken: !GetAtt LambdaFunction1.Arn
+  Primerinvoke:
+    Type: AWS::CloudFormation::CustomResource
+    DependsOn: LambdaFunction1
+    Version: "1.0"
+    Properties:
+      ServiceToken: !GetAtt LambdaFunction1.Arn
