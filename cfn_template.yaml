@@ -131,7 +131,7 @@ Resources:
             
             #upto here works with deploy through cf
             #using id move csv file to S3 curated bucket for typical weekday and weekend
-            client_s3 = boto3.resource('s3')
+
 
 
             return
