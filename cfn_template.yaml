@@ -129,8 +129,26 @@ Resources:
             #calls athena query
             #results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
             print 'invocation'
+
+            return
+
+          def lambda_handler(event, context):
+            lambda_client = boto3.client('lambda')
+            test_event = '{"name":"test1"}'
+            lambda_client.invoke(
+              FunctionName='target1',
+              InvocationType='Event',
+              Payload=test_event,
+            )
+              responseValue = 120
+              responseData = {}
+              responseData['Data'] = responseValue
+              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData)
+              
+            print 'SUCCESSFUL COMPLETED - lamabda'
             
             return
+            
 
   Primerinvoke:
     Type: AWS::CloudFormation::CustomResource
