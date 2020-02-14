@@ -132,15 +132,6 @@ Resources:
             #upto here works with deploy through cf
             #using id move csv file to S3 curated bucket for typical weekday and weekend
             client_s3 = boto3.resource('s3')
-            
-            # Copy anthena query to curated csv for frontend rendering - html,D3
-            client_s3.Object(bucketname_routes,  "stat/rolling_48_hour_window.csv").copy_from(CopySource= filepath_incidents_statistic_write + "qry/"+ query_execution_id + ".csv")
-            
-            # Delete the former object A
-            client_s3.Object(bucketname_routes, "stat/qry/"+ query_execution_id + ".csv").delete()
-            client_s3.Object(bucketname_routes, "stat/qry/"+ query_execution_id + ".csv.metadata").delete()
 
-            #set lifecycle policy in bucket subfolder - month exipiry (28-32 files)
-            print 'SUCCESSFUL - athena_next_24_hrs_past_24_hrs'  
 
             return
