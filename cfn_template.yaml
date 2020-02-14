@@ -128,5 +128,6 @@ Resources:
 
             #calls athena query
             results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
+            print 'invocation'
             
             return
