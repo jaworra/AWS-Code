@@ -127,7 +127,11 @@ Resources:
               DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,col_hm) 
 
             #calls athena query
-            results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
+            #results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
             print 'invocation'
             return
 
+          def lambda_handler(event, context):
+                
+            print 'SUCCESSFUL COMPLETED - lamabda'
+          return 
