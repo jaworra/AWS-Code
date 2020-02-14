@@ -131,7 +131,7 @@ Resources:
             print 'invocation'
             return
 
-            def lambda_handler(event, context):
+          def lambda_handler(event, context):
                 
-              print 'SUCCESSFUL COMPLETED - lamabda'
-            return 
+            print 'SUCCESSFUL COMPLETED - lamabda'
+          return 
