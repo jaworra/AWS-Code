@@ -5,8 +5,8 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       BucketName: cloudformation-build-incidentsdashboard-jaworra
-
-  lambdaFunction:
+  
+  LambdaFunction1:
     Type: AWS::Lambda::Function
     Properties:
       Description: Python Function Handler
@@ -127,7 +127,14 @@ Resources:
               DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,col_hm) 
 
             #calls athena query
-            results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
+            #results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
             print 'invocation'
             
             return
+
+Primerinvoke:
+  Type: AWS::CloudFormation::CustomResource
+  DependsOn: LambdaFunction1
+  Version: "1.0"
+  Properties:
+    ServiceToken: !GetAtt LambdaFunction1.Arn
