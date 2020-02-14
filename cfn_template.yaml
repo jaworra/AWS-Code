@@ -126,7 +126,5 @@ Resources:
               col_wkday, col_hm,sel_stat_2,col_inc,col_inc,col_inc,col_inc,col_inc,
               DATABASE, TABLE, col_wkday, day_of_week,col_wkday,col_hm,col_hm) 
 
-            #calls athena query
-            results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
             
             return
