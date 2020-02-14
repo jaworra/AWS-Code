@@ -129,9 +129,4 @@ Resources:
             #calls athena query
             results,query_execution_id = athena_qry(query,DATABASE,S3_OUTPUT,RETRY_COUNT)
             
-            #upto here works with deploy through cf
-            #using id move csv file to S3 curated bucket for typical weekday and weekend
-
-
-
             return
