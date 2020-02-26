@@ -39,4 +39,3 @@ Resources:
       Code:
         S3Bucket: deployment-artefacts-jaworra 
         S3Key: test_jaworra_cloudformation_build_s3.zip #Update S3 Key with every upload
-=
