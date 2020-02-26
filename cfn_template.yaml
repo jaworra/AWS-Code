@@ -9,8 +9,8 @@ Resources:
   lambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Description: Python Function Handler
-      FunctionName: test_jaworra_cloudformation_build
+      Description: Inline Yaml lambda build
+      FunctionName: test_jaworra_cloudformation_build_inline
       Handler: index.handler
       MemorySize: 128
       Role: arn:aws:iam::708280501988:role/lambda_generic
@@ -18,8 +18,24 @@ Resources:
       Code:
         ZipFile: |
           #Sample of Inline lambda function
-          #todo: 1) test limit of functionality
+          #Disadv of this approach - external libraries cannot be used, certain characters must be escaped and in JSON templates
+          #This approach is best suited for function code that is simple and does not change frequently
+          #todo: test limit of functionality
           import json
           def handler(event, context):
-            print 'testing'
+            print 'inline deployment'
             print("Event: %s" % json.dumps(event))
+            return 
+            
+  lambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Lambda via s3 Bucket
+      FunctionName: test_jaworra_cloudformation_build
+      Handler: index.handler
+      MemorySize: 128
+      Role: arn:aws:iam::708280501988:role/lambda_generic
+      Runtime: python2.7 
+      Code:
+        S3Bucket: deployment-artefacts-jaworra 
+        S3Key: test_jaworra_cloudformation_build_s3.zip
