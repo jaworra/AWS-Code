@@ -26,12 +26,12 @@ Resources:
             print 'inline deployment'
             print("Event: %s" % json.dumps(event))
             return 
-            
-  lambdaFunction:
+
+  lambdaFunction2:
     Type: AWS::Lambda::Function
     Properties:
       Description: Lambda via s3 Bucket
-      FunctionName: test_jaworra_cloudformation_build
+      FunctionName: test_jaworra_cloudformation_build_S3
       Handler: index.handler
       MemorySize: 128
       Role: arn:aws:iam::708280501988:role/lambda_generic
