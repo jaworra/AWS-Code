@@ -15,7 +15,6 @@ s3 = boto3.resource('s3')
 bucket_source = 'streams-gateway-raw-extract' 
 bucket_destination ='streams-gateway-raw-extract-partition'
 
-
 def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
     s3 = boto3.client('s3')
     s3_resource = boto3.resource('s3')
@@ -45,7 +44,6 @@ for i in range(10,30,1):
         print(startAfter)
 
 print('Finish Feb')
-
 #Mar
 for i in range(1,10,1):
     startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
@@ -57,48 +55,7 @@ for i in range(10,24,1):
     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
     print(startAfter)
 
-
 print('copy complete')
-
-
-
-
-'''
-#view folders input to send out
-s3client = boto3.client('s3')
-startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day=05' #'Day' #'firstlevelFolder/secondLevelFolder  
-theobjects = s3client.list_objects_v2(Bucket=bucket_source, StartAfter=startAfter)
-for object in theobjects['Contents']:
-    old_key= object['Key']
-    new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
-    copy_source = {'Bucket': bucket_source,'Key': old_key}
-    s3.meta.client.copy(copy_source, bucket_destination, new_key)
-    print(new_key)
-'''
-'''
-s3client = boto3.client('s3')
-for i in range(2,10,1):
-    startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
-    theobjects = s3client.list_objects_v2(Bucket=bucket_source, StartAfter=startAfter)
-    for object in theobjects['Contents']:
-        old_key= object['Key']
-        new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
-        copy_source = {'Bucket': bucket_source,'Key': old_key}
-        s3.meta.client.copy(copy_source, bucket_destination, new_key)
-        #print(new_key)
-    
-for i in range(10,24,1):
-    startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day='+str(i)
-    theobjects = s3client.list_objects_v2(Bucket=bucket_source, StartAfter=startAfter)
-    for object in theobjects['Contents']:
-        old_key= object['Key']
-        new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
-        copy_source = {'Bucket': bucket_source,'Key': old_key}
-        s3.meta.client.copy(copy_source, bucket_destination, new_key)
-        #print(new_key)
-    
-print('copy complete')
-'''
 
 '''
 #below code uses the cli
@@ -112,3 +69,17 @@ push=subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
 push.wait()   # the new line
 print(push.returncode)
 '''
+
+'''
+#depricated code - limitation with 's3client.list_objects_v2' returning only max 1000 files.
+s3client = boto3.client('s3')
+startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day=05' #'Day' #'firstlevelFolder/secondLevelFolder  
+theobjects = s3client.list_objects_v2(Bucket=bucket_source, StartAfter=startAfter)
+for object in theobjects['Contents']:
+    old_key= object['Key']
+    new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
+    copy_source = {'Bucket': bucket_source,'Key': old_key}
+    s3.meta.client.copy(copy_source, bucket_destination, new_key)
+    print(new_key)
+'''
+
