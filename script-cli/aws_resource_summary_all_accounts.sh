@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#aws_profile=('jaworra_sys' 'aws_mpi_account');
-read -rsp $'Press enter to exit...\n'
+aws_profile=('jaworra_sys' 'aws_mpi_account');
 
 #loop AWS profiles
 for i in "${aws_profile[@]}"; do
@@ -21,6 +20,12 @@ for i in "${aws_profile[@]}"; do
 done
 
 read -rsp $'Press enter to exit...\n'
+
+#Loop through instances
+for dns in $(aws ec2 describe-instances --region ap-southeast-2  --query 'Reservations[*].Instances[*].PublicDnsName' --output text) ; do echo $dns ; done
+
+read -rsp $'Press enter to exit...\n'
+
 
 #ToDo: check rds instances in acount, include profile loop
 #RDS versions
