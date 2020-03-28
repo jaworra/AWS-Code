@@ -27,6 +27,10 @@ for dns in $(aws ec2 describe-instances --region ap-southeast-2  --query 'Reserv
 read -rsp $'Press enter to exit...\n'
 
 
+#List all lambda functions
+#aws lambda list-functions --max-items 10
+
+
 #ToDo: check rds instances in acount, include profile loop
 #RDS versions
 #aws --profile jaworra_sys --region ap-southeast-2 rds describe-db-instances | awk END'{print}'
