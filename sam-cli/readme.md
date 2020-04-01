@@ -1,0 +1,12 @@
+#run and deploy lambda python functions locally using the SAM cli
+
+#pip install ptvsd
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-debugging-python.html
+
+#build and deploy with aws vs code ext
+#1) detect sam cli
+#2) create new sam Application
+
+#https://blog.thundra.io/debug-your-python-functions-locally
+
+#ToDO: Need to fix pathing issue - possibly a problem with launch json.
