@@ -8,5 +8,6 @@
 #2) create new sam Application
 
 #https://blog.thundra.io/debug-your-python-functions-locally
+#https://www.youtube.com/watch?v=FINV-VmCXms
 
 #ToDO: Need to fix pathing issue - possibly a problem with launch json.
