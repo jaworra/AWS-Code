@@ -2,18 +2,41 @@
 #to a new bucket - for the current case this is required for athena partitions
 #needing lower case. e.g Year=2020 to year=2020 etc
 
-
 #using the boto3 library
 import boto3
 import re
 
 #switching accounts with the cli
-#export AWS_DEFAULT_PROFILE=[account_name]
-#aws s3 ls #check
-
+#aws_profile=('jaworra_sys' 'aws_mpi_account') #my accounts
+boto3.setup_default_session(profile_name='aws_mpi_account') #change default session in code
+'''
+#Check with account with below list of buckets
 s3 = boto3.resource('s3')
-bucket_source = 'streams-gateway-raw-extract' 
-bucket_destination ='streams-gateway-raw-extract-partition'
+for bucket in s3.buckets.all():
+  print(bucket.name)
+'''
+
+def main ():
+    bucket_source = 'streams-gateway-raw-extract' 
+    bucket_destination ='streams-gateway-raw-extract-partition'
+
+    #March
+    for i in range(24,32,1):
+        print(i)
+        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day='+str(i)
+        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        print(startAfter)
+        print('copy complete')
+
+    #Apirl
+    for i in range(1,2,1):
+
+        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
+        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        print(startAfter)
+        print(i)
+    return
+
 
 def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
     s3 = boto3.client('s3')
@@ -30,34 +53,12 @@ def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
                 copy_source = {'Bucket': bucket_source,'Key': old_key}
                 s3_resource.meta.client.copy(copy_source, bucket_destination, new_key)
 
+main()
 
-#Feb
-for i in range(1,10,1):
-    startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day=0'+str(i)
-    get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    print(startAfter)
-
-for i in range(10,30,1):
-    if i != 17: #skip 17 already done
-        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day='+str(i)
-        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-        print(startAfter)
-
-print('Finish Feb')
-#Mar
-for i in range(1,10,1):
-    startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
-    get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    print(startAfter)
-
-for i in range(10,24,1):
-    startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day='+str(i)
-    get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    print(startAfter)
-
-print('copy complete')
 
 '''
+Todo: other implementation with the cli via python without boto3
+
 #below code uses the cli
 import subprocess
 #subprocess.run(['aws', 's3', 'ls', 's3://path/to/my/bucket/12434', '--recursive', '--human-readable', '--summarize'])
