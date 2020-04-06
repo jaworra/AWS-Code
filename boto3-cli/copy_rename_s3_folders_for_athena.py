@@ -20,21 +20,21 @@ def main ():
     bucket_source = 'streams-gateway-raw-extract' 
     bucket_destination ='streams-gateway-raw-extract-partition'
 
+
     #March
-    for i in range(24,32,1):
-        print(i)
-        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day='+str(i)
-        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-        print(startAfter)
-        print('copy complete')
-
-    #Apirl
     for i in range(1,2,1):
-
         startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
         get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
         print(startAfter)
-        print(i)
+        #print(i)
+
+
+    #Apirl
+    for i in range(1,6,1):
+        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=04/Day=0'+str(i)
+        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        print(startAfter)
+        #print(i)
     return
 
 
