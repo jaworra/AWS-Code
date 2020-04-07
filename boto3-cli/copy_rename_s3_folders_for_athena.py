@@ -96,16 +96,5 @@ push.wait()   # the new line
 print(push.returncode)
 '''
 
-'''
-#depricated code - limitation with 's3client.list_objects_v2' returning only max 1000 files.
-s3client = boto3.client('s3')
-startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day=05' #'Day' #'firstlevelFolder/secondLevelFolder  
-theobjects = s3client.list_objects_v2(Bucket=bucket_source, StartAfter=startAfter)
-for object in theobjects['Contents']:
-    old_key= object['Key']
-    new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
-    copy_source = {'Bucket': bucket_source,'Key': old_key}
-    s3.meta.client.copy(copy_source, bucket_destination, new_key)
-    print(new_key)
-'''
+
 
