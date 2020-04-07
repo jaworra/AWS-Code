@@ -1,4 +1,4 @@
-#Script renames based on cli,
+#Script renames based on cli, requried if using Athena/glue to discover partions that are in uppercase(hive enviromnet)
 #Todo: performance optimisation required. Possibly due to string list length (see flag, -A) ,substitution (see flag, -B)
 #    : Tried to implment aws s3 --recursive however directories need replacing (see flag, -C)
 
