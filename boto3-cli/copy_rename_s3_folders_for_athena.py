@@ -18,22 +18,48 @@ for bucket in s3.buckets.all():
 
 def main ():
     bucket_source = 'streams-gateway-raw-extract' 
-    bucket_destination ='streams-gateway-raw-extract-partition'
+    bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
 
+    # #2019 Nov
+    # for i in range(1,2,1):
+    #     startAfter = 'traffic/v1/ds/csv/Year=2020/Month=01/Day=0'+str(i)
+    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+    #     print(startAfter)
+    #     print(i)
 
-    #March
-    for i in range(1,2,1):
-        startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
-        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-        print(startAfter)
-        #print(i)
+    # #2019 Dec
+    # for i in range(1,2,1):
+    #     startAfter = 'traffic/v1/ds/csv/Year=2019/Month=01/Day=0'+str(i)
+    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+    #     print(startAfter)
+    #     print(i)
 
+    # #Jan
+    # for i in range(1,2,1):
+    #     startAfter = 'traffic/v1/ds/csv/Year=2020/Month=01/Day=0'+str(i)
+    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+    #     print(startAfter)
+    #     print(i)
+
+    # #Feb
+    # for i in range(1,2,1):
+    #     startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02/Day=0'+str(i)
+    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+    #     print(startAfter)
+    #     print(i)
+
+    # #March
+    # for i in range(1,2,1):
+    #     startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03/Day=0'+str(i)
+    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+    #     print(startAfter)
+    #     print(i)
 
     #Apirl
-    for i in range(1,6,1):
+    for i in range(1,5,1):
         startAfter = 'traffic/v1/ds/csv/Year=2020/Month=04/Day=0'+str(i)
         get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-        print(startAfter)
+        #print(startAfter)
         #print(i)
     return
 
@@ -52,7 +78,6 @@ def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
                 new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
                 copy_source = {'Bucket': bucket_source,'Key': old_key}
                 s3_resource.meta.client.copy(copy_source, bucket_destination, new_key)
-
 main()
 
 
