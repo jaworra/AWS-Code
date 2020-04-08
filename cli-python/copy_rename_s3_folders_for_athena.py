@@ -20,27 +20,21 @@ def main ():
     bucket_source = 'streams-gateway-raw-extract' 
     bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
 
-    # #2019 Nov
-    # for i in range(1,2,1):
-    #     startAfter = 'traffic/v1/ds/csv/Year=2019/Month=11/Day=0'+str(i)
-    #     get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    #     print(startAfter)
-    #     print(i)
+    paths = ['traffic/v1/ds/csv/Year=2019'
+    
+            #completed
+            #  'traffic/v1/ds/csv/Year=2020/Month=02',
+            #  'traffic/v1/ds/csv/Year=2020/Month=01',
+            #  'traffic/v1/ds/agg/csv/Year=2019',
+            #  'traffic/v1/ds/agg/csv/Year=2020'
 
-    #startAfter = 'traffic/v1/ds/csv/Year=2020/Month=03'
-    #get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    #write as a list of array to process
-
-    paths = ['traffic/v1/ds/csv/Year=2020/Month=02',
-             'traffic/v1/ds/csv/Year=2020/Month=01',
-             'traffic/v1/ds/agg/csv/Year=2019',
-             'traffic/v1/ds/agg/csv/Year=2020'
+            #  below traffic not needed.
             #  'traffic/v1/link/csv/Year=2020',
             #  'traffic/v1/link/csv/Year=2019',
             #  'traffic/v1/movement/csv/Year=2020',
             #  'traffic/v1/movement/csv/Year=2019',
             #  'traffic/v1/npi/agg/csv/Year=2020',
-            #  'traffic/v1/npi/agg/csv/Year=2019',
+            #  'traffic/v1/npi/agg/csv/Year=2019',s
             #  'traffic/v1/npi/csv/Year=2020',
             #  'traffic/v1/npi/csv/Year=2019',  
             #  'traffic/v1/vd/agg/csv/Year=2020',
@@ -51,7 +45,7 @@ def main ():
 
     for i in range (len(paths)):
         startAfter = paths[i]
-        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        #get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
         print("Completed transfer of: "+startAfter)
 
     # startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02'
