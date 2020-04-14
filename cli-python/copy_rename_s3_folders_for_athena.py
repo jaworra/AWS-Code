@@ -5,10 +5,14 @@
 #using the boto3 library
 import boto3
 import re
+import datetime
+import pathlib
 
 #switching accounts with the cli
 #aws_profile=('jaworra_sys' 'aws_mpi_account') #my accounts
-boto3.setup_default_session(profile_name='aws_mpi_account') #change default session in code
+boto3.setup_default_session(profile_name='tmr_mpi_account') #change default session in code
+
+
 '''
 #Check with account with below list of buckets
 s3 = boto3.resource('s3')
@@ -20,8 +24,18 @@ def main ():
     bucket_source = 'streams-gateway-raw-extract' 
     bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
 
-    paths = ['traffic/v1/ds/csv/Year=2019'
-    
+    paths = ['traffic/v1/ds/csv/Year=2020/Month=04/Day=01',
+            'traffic/v1/ds/csv/Year=2020/Month=04/Day=02',
+            'traffic/v1/ds/csv/Year=2020/Month=04/Day=03',
+            'traffic/v1/ds/csv/Year=2020/Month=04/Day=04',
+            'traffic/v1/ds/csv/Year=2020/Month=04/Day=05',
+            'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' 
+
+            #'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' #this is half done
+            # month 4 done!
+            # ToDo: 3,2,1 for year 2020
+
+            #'traffic/v1/ds/csv/Year=2019'
             #completed
             #  'traffic/v1/ds/csv/Year=2020/Month=02',
             #  'traffic/v1/ds/csv/Year=2020/Month=01',
@@ -45,7 +59,7 @@ def main ():
 
     for i in range (len(paths)):
         startAfter = paths[i]
-        #get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
         print("Completed transfer of: "+startAfter)
 
     # startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02'
@@ -54,6 +68,18 @@ def main ():
     # get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
     return
 
+
+def group_minutes(modified_date_mm):
+    current_mins = modified_date_mm
+    if current_mins < 15:
+        minute_group = 00
+    elif current_mins < 30:
+        minute_group = 15
+    elif current_mins < 45:
+        minute_group = 30 
+    elif current_mins < 60:
+        minute_group = 45 
+    return minute_group
 
 def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
     s3 = boto3.client('s3')
@@ -67,11 +93,23 @@ def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
             i+=1
             old_key= obj['Key']
             new_key = old_key.replace("Year=", "year=").replace("Month=", "month=").replace("Day=", "day=")
+            
+            #comment below lines if hhmm partition not included.
+            #copy_source = {'Bucket': bucket_source,'Key': old_key}
+            #s3_resource.meta.client.copy(copy_source, bucket_destination, new_key)
+            #return
+
+            #modify new key to include the hhmm partion. only works on orginal
+            modified_date= obj['LastModified']
+            modified_date_mm = group_minutes(modified_date.minute)
+            hhmm_key_str = '{:02}{:02}'.format(int(modified_date.hour), int(modified_date_mm))
+
+            filename = new_key.split('/').pop()
+            new_key_hhmm = new_key[:-len(filename)] + 'hhmm=' + hhmm_key_str + '/' + filename
+
             copy_source = {'Bucket': bucket_source,'Key': old_key}
-            s3_resource.meta.client.copy(copy_source, bucket_destination, new_key)
+            s3_resource.meta.client.copy(copy_source, bucket_destination, new_key_hhmm)
+
+    return
+
 main()
-
-
-
-
-

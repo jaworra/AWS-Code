@@ -1,6 +1,7 @@
 #!/bin/bash
 
-aws_profile=('jaworra_sys' 'aws_mpi_account');
+aws_profile=('personal_account' 'tmr_travel_time_dev' 'tmr_mpi_account');
+
 
 #loop AWS profiles
 for i in "${aws_profile[@]}"; do

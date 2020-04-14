@@ -2,6 +2,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+    
         {
            "name": "SAM CLI Python Hello World",
            "type": "python",

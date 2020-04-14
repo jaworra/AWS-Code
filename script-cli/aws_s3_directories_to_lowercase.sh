@@ -2,7 +2,7 @@
 #Todo: performance optimisation required. Possibly due to string list length (see flag, -A) ,substitution (see flag, -B)
 #    : Tried to implment aws s3 --recursive however directories need replacing (see flag, -C)
 
-aws_profile=('aws_mpi_account');
+aws_profile=('tmr_mpi_account');
 buckets=('streams-gateway-raw-extract-partition'); #specific bucket.
 startfrom=('streams-gateway-raw-extract-partition/traffic/v1/ds/csv/year=2020/month=02/day=01/'); #specific bucket.
 #buckets=($(aws --profile "${i}" --region ap-southeast-2 s3 ls s3:// --recursive | awk '{print $3}')) #can set multiple locations here
