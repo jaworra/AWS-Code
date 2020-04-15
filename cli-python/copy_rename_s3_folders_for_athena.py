@@ -24,15 +24,32 @@ def main ():
     bucket_source = 'streams-gateway-raw-extract' 
     bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
 
-    paths = ['traffic/v1/ds/csv/Year=2020/Month=04/Day=01',
-            'traffic/v1/ds/csv/Year=2020/Month=04/Day=02',
-            'traffic/v1/ds/csv/Year=2020/Month=04/Day=03',
-            'traffic/v1/ds/csv/Year=2020/Month=04/Day=04',
-            'traffic/v1/ds/csv/Year=2020/Month=04/Day=05',
-            'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' 
+    paths = ['traffic/v1/ds/csv/Year=2020/Month=02',
+             'traffic/v1/ds/csv/Year=2020/Month=01'
+ 
+             #'traffic/v1/ds/csv/Year=2020/Month=02',
+             #'traffic/v1/ds/csv/Year=2020/Month=01'
+                    
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=22',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=23',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=24',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=25',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=26',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=27',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=28',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=29',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=30',
+            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=31'
 
-            #'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' #this is half done
+
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=01',
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=02',
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=03',
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=04',
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=05',
+            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' #this is half done
             # month 4 done!
+
             # ToDo: 3,2,1 for year 2020
 
             #'traffic/v1/ds/csv/Year=2019'
@@ -62,22 +79,17 @@ def main ():
         get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
         print("Completed transfer of: "+startAfter)
 
-    # startAfter = 'traffic/v1/ds/csv/Year=2020/Month=02'
-    # get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-    # startAfter = 'traffic/v1/ds/csv/Year=2020/Month=01'
-    # get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
     return
 
 
 def group_minutes(modified_date_mm):
-    current_mins = modified_date_mm
-    if current_mins < 15:
+    if modified_date_mm < 15:
         minute_group = 00
-    elif current_mins < 30:
+    elif modified_date_mm < 30:
         minute_group = 15
-    elif current_mins < 45:
+    elif modified_date_mm < 45:
         minute_group = 30 
-    elif current_mins < 60:
+    elif modified_date_mm < 60:
         minute_group = 45 
     return minute_group
 
@@ -106,7 +118,6 @@ def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
 
             filename = new_key.split('/').pop()
             new_key_hhmm = new_key[:-len(filename)] + 'hhmm=' + hhmm_key_str + '/' + filename
-
             copy_source = {'Bucket': bucket_source,'Key': old_key}
             s3_resource.meta.client.copy(copy_source, bucket_destination, new_key_hhmm)
 
