@@ -12,7 +12,6 @@ import pathlib
 #aws_profile=('jaworra_sys' 'aws_mpi_account') #my accounts
 boto3.setup_default_session(profile_name='tmr_mpi_account') #change default session in code
 
-
 '''
 #Check with account with below list of buckets
 s3 = boto3.resource('s3')
@@ -22,16 +21,16 @@ for bucket in s3.buckets.all():
 
 def main ():
     bucket_source = 'streams-gateway-raw-extract' 
-    bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
+    bucket_destination = bucket_source
 
     #careful! this copies and deletes s3 folders
-    paths = ['traffic/a/c'
+    paths = ['traffic/v1/ds/csv/Year=2019'
         
             #'traffic/v1/ds/csv/year=2019/month=11/day=12'
         
              #'traffic/v1/ds/csv/Year=2020/Month=02',
              #'traffic/v1/ds/csv/Year=2020/Month=01'
- 
+
              #'traffic/v1/ds/csv/Year=2020/Month=02',
              #'traffic/v1/ds/csv/Year=2020/Month=01'
                     
@@ -81,14 +80,13 @@ def main ():
 
     for i in range (len(paths)):
         startAfter = paths[i]
-        #get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
-        print("Completed transfer of: "+startAfter)
-
-        #remove residuals
-        print("Deleting "+startAfter + "  ....")
-        s3 = boto3.resource('s3')
-        bucket = s3.Bucket(bucket_source)
-        bucket.objects.filter(Prefix=startAfter).delete()    
+        #copy then delete
+        try:
+            get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+            delete_s3_files_and_folders(bucket_source,bucket_destination,startAfter)
+            print('transfer complete')
+        except:
+            print('Error in s3 file transfer')
     return
 
 
@@ -104,6 +102,7 @@ def group_minutes(modified_date_mm):
     return minute_group
 
 def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
+    print("Copying files in " + prefix + "  ....")
     s3 = boto3.client('s3')
     s3_resource = boto3.resource('s3')
     paginator = s3.get_paginator('list_objects_v2')
@@ -130,6 +129,14 @@ def get_list_after_1000_and_etl(bucket_source,bucket_destination,prefix):
             new_key_hhmm = new_key[:-len(filename)] + 'hhmm=' + hhmm_key_str + '/' + filename
             copy_source = {'Bucket': bucket_source,'Key': old_key}
             s3_resource.meta.client.copy(copy_source, bucket_destination, new_key_hhmm)
+    return
+
+def delete_s3_files_and_folders(bucket_source,bucket_destination,prefix):
+    #remove residuals
+    print("Deleting files in " + prefix + "  ....")
+    s3 = boto3.resource('s3')
+    bucket = s3.Bucket(bucket_source) 
+    bucket.objects.filter(Prefix=prefix).delete() 
 
     return
 
