@@ -24,8 +24,13 @@ def main ():
     bucket_source = 'streams-gateway-raw-extract' 
     bucket_destination = bucket_source#'streams-gateway-raw-extract-partition'
 
-    paths = ['traffic/v1/ds/csv/Year=2020/Month=02',
-             'traffic/v1/ds/csv/Year=2020/Month=01'
+    #careful! this copies and deletes s3 folders
+    paths = ['traffic/a/c'
+        
+            #'traffic/v1/ds/csv/year=2019/month=11/day=12'
+        
+             #'traffic/v1/ds/csv/Year=2020/Month=02',
+             #'traffic/v1/ds/csv/Year=2020/Month=01'
  
              #'traffic/v1/ds/csv/Year=2020/Month=02',
              #'traffic/v1/ds/csv/Year=2020/Month=01'
@@ -76,9 +81,14 @@ def main ():
 
     for i in range (len(paths)):
         startAfter = paths[i]
-        get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
+        #get_list_after_1000_and_etl(bucket_source,bucket_destination,startAfter)
         print("Completed transfer of: "+startAfter)
 
+        #remove residuals
+        print("Deleting "+startAfter + "  ....")
+        s3 = boto3.resource('s3')
+        bucket = s3.Bucket(bucket_source)
+        bucket.objects.filter(Prefix=startAfter).delete()    
     return
 
 
