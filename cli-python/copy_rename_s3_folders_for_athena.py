@@ -24,44 +24,11 @@ def main ():
     bucket_destination = bucket_source
 
     #careful! this copies and deletes s3 folders
-    paths = ['traffic/v1/ds/csv/Year=2019'
+    paths = ['traffic/v1/ds/agg/csv/Year=2019'
         
-            #'traffic/v1/ds/csv/year=2019/month=11/day=12'
-        
-             #'traffic/v1/ds/csv/Year=2020/Month=02',
-             #'traffic/v1/ds/csv/Year=2020/Month=01'
-
-             #'traffic/v1/ds/csv/Year=2020/Month=02',
-             #'traffic/v1/ds/csv/Year=2020/Month=01'
-                    
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=22',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=23',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=24',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=25',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=26',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=27',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=28',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=29',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=30',
-            # 'traffic/v1/ds/csv/Year=2020/Month=03/Day=31'
-
-
-            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=01',
-            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=02',
-            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=03',
-            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=04',
-            # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=05',
+            #month 4 day 6 half done
+            # 'traffic/v1/ds/csv/2019' #not done
             # 'traffic/v1/ds/csv/Year=2020/Month=04/Day=06' #this is half done
-            # month 4 done!
-
-            # ToDo: 3,2,1 for year 2020
-
-            #'traffic/v1/ds/csv/Year=2019'
-            #completed
-            #  'traffic/v1/ds/csv/Year=2020/Month=02',
-            #  'traffic/v1/ds/csv/Year=2020/Month=01',
-            #  'traffic/v1/ds/agg/csv/Year=2019',
-            #  'traffic/v1/ds/agg/csv/Year=2020'
 
             #  below traffic not needed.
             #  'traffic/v1/link/csv/Year=2020',
