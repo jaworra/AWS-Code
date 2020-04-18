@@ -20,4 +20,4 @@ read -rsp $'Press enter to exit...\n'
 #export AWS_PROFILE=personal_account
 #aws cofigure --profile personal_account
 #Default region name:ap-southeast-2
-aws codecommit create-repository --repository-name lambda-pipeline-repo --repository-description "microservices deploy repository" --tags Team=jaworra
+#aws codecommit create-repository --repository-name lambda-pipeline-repo --repository-description "microservices deploy repository" --tags Team=jaworra
