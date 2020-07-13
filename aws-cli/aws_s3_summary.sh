@@ -2,7 +2,7 @@
 #aws_profile=('personal_account' 'tmr_travel_time_dev' 'tmr_mpi_account');
 aws_profile=('personal_account') 
 
-detail_report=false
+detail_report=false #true for size output
 
 if ($detail_report); then #
     for i in "${aws_profile[@]}"; do
